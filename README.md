@@ -9,3 +9,13 @@ Start communication by initializing a `Hackerpet` class. Since this opens a clie
 It is possible to interact with the hackerpet in the following ways:
 
 * `.status()`: Get current status of the hackerpet
+* `.set_game(game: Game)`: set the currently playing game
+* `set_max_kibbles(max_kibbles: MaxKibbles)`: set the max kibbles distributed in a day
+* `set_dst(dst_on: bool)`: enable or disable DST
+* `set_timezone(tz_offset: int)`: set timezone (-12, 13)
+* `set_hub_mode(hub_mode: HubMode)`: set hub mode between `STAY_OFF`, `STAY_ON`, and `SCHEDULED`
+* `set_schedule(schedule: Schedule)`: set weekday/weekend schedule when `HubMode == SCHEDULED`
+
+# Dependencies
+
+The only dependency for the project is [`aiohttp`](https://docs.aiohttp.org/en/stable/).
