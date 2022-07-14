@@ -1,5 +1,6 @@
 """
-Communicate with a [hackerpet](https://docs.particle.io/reference/device-os/libraries/h/hackerpet_plus/)
+Communicate with a
+[hackerpet](https://docs.particle.io/reference/device-os/libraries/h/hackerpet_plus/)
 via the Hackerpet class. See main() fn for example usage.
 
 Functionality includes:
@@ -44,6 +45,7 @@ class OutOfRange(IndexError):
 
     @staticmethod
     def test_range(name: str, lower: int, upper: int, found: int):
+        """helper function for testing if a value is out of range"""
         if found < lower or found > upper:
             raise OutOfRange(name, lower, upper, found)
 
@@ -233,7 +235,7 @@ class MaxKibbles:
         self.value = limit if limit else 0
 
     def __str__(self) -> str:
-        if self._limit == 0 or self._limit == None:
+        if self._limit == 0 or self._limit is None:
             return "no limit"
         else:
             return f"limit: {self._limit}"
@@ -260,20 +262,33 @@ class Schedule:
         self.weekday_from = weekday_from
         self.weekday_to = weekday_to
         self.weekend_from = weekend_from
-        self.weekend_to = weekday_to
+        self.weekend_to = weekend_to
 
     @staticmethod
-    def _hm_format(t: time) -> str:
-        return t.strftime("%H:%S")
+    def _hm_format(tme: time) -> str:
+        return tme.strftime("%H:%S")
 
     def __str__(self) -> str:
-        return f"schedule: weekdays {Schedule._hm_format(self.weekday_from)} - {Schedule._hm_format(self.weekday_to)}; weekends {Schedule._hm_format(self.weekend_from)} - {Schedule._hm_format(self.weekend_to)}"
+        return (
+            "schedule: weekdays "
+            f"{Schedule._hm_format(self.weekday_from)} - "
+            f"{Schedule._hm_format(self.weekday_to)}; "
+            f"weekends {Schedule._hm_format(self.weekend_from)} - "
+            f"{Schedule._hm_format(self.weekend_to)}"
+        )
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}: <weekday_from: {self.weekday_from.__repr__()}, weekday_to: {self.weekday_to.__repr__()}, weekend_from: {self.weekend_from.__repr__()}, weekend_to: {self.weekday_to.__repr__()}>"
+        return (
+            f"{type(self).__name__}: "
+            f"<weekday_from: {self.weekday_from.__repr__()}, "
+            f"weekday_to: {self.weekday_to.__repr__()}, "
+            f"weekend_from: {self.weekend_from.__repr__()}, "
+            f"weekend_to: {self.weekday_to.__repr__()}>"
+        )
 
     @classmethod
     def from_json(cls: type, payload: Any) -> "Schedule":
+        """parse json response to instantiate Schedule"""
         weekday_from = payload["weekday_from"]
         weekday_to = payload["weekday_to"]
         weekend_from = payload["weekend_from"]
@@ -295,40 +310,67 @@ class Schedule:
 
 
 class Status:
-    """Current status of the hub"""
+    """current status of the hub"""
 
-    time: datetime
-    hub_mode: HubMode
-    hub_status: HubStatus
-    game: Game | GameTransitioning
-    hub_state: HubState
-    max_kibbles: MaxKibbles
-    timezone_offset: int
-    schedule: Optional[Schedule]
+    _raw_body: Any
 
     def __init__(self, body: Any):
-        self.time = datetime.strptime(body["time"], "%a %b %d %H:%M:%S %Y")
-        self.hub_mode = HubMode.from_int_str(body["hub_mode"])
-        self.hub_status = HubStatus.from_status(body["status"])
-        prev_game = Game.from_int_str(body["game_id_playing"])
-        next_game = Game.from_int_str(body["game_id_queued"])
+        self._raw_body = body
+
+    def as_dict(self) -> dict[str, Any]:
+        """represent Status as a simple dict"""
+        return {
+            k: getattr(self, k)
+            for k, v in self.__class__.__dict__.items()
+            if isinstance(v, property)
+        }
+
+    @property
+    def time(self) -> datetime:
+        """time as returned from the hackerpet"""
+        return datetime.strptime(self._raw_body["time"], "%a %b %d %H:%M:%S %Y")
+
+    @property
+    def hub_mode(self) -> HubMode:
+        """one of STAY_ON, STAY_OFF, SCHEDULE"""
+        return HubMode.from_int_str(self._raw_body["hub_mode"])
+
+    @property
+    def game(self) -> Game | GameTransitioning:
+        """the current game level being played, or if it is transitioning between levels"""
+        prev_game = Game.from_int_str(self._raw_body["game_id_playing"])
+        next_game = Game.from_int_str(self._raw_body["game_id_queued"])
         if prev_game == next_game:
-            self.game = next_game
+            return next_game
         else:
-            self.game = GameTransitioning(prev_game, next_game)
-        self.hub_state = HubState(body["hub_state"])
-        self.max_kibbles = MaxKibbles(body["max_kibbles"])
+            return GameTransitioning(prev_game, next_game)
 
-        timezone_offset_str = body["timezone"]
+    @property
+    def hub_state(self) -> HubState:
+        """one of Standby, Active"""
+        return HubState(self._raw_body["hub_state"])
+
+    @property
+    def max_kibbles(self) -> MaxKibbles:
+        """max kibbles the hackerpet will dispense in a day"""
+        return MaxKibbles(self._raw_body["max_kibbles"])
+
+    @property
+    def timezone_offset(self) -> int:
+        """timezone set on the hackerpet"""
+        timezone_offset_str = self._raw_body["timezone"]
         try:
-            self.timezone_offset = int(float(timezone_offset_str))
-        except ValueError:
-            raise IllegalValue(float, timezone_offset_str)
+            return int(float(timezone_offset_str))
+        except ValueError as err:
+            raise IllegalValue(float, timezone_offset_str) from err
 
+    @property
+    def schedule(self) -> Optional[Schedule]:
+        """only valid if hub_mode is SCHEDULED; what the current shedule is"""
         if self.hub_mode == HubMode.SCHEDULED:
-            self.schedule = Schedule.from_json(body)
+            return Schedule.from_json(self._raw_body)
         else:
-            self.schedule = None
+            return None
 
 
 class Hackerpet:
@@ -341,25 +383,24 @@ class Hackerpet:
     session: aiohttp.ClientSession
     url: str
 
-    def __init__(self, url: str = "http://cleverpet.local"):
+    def __init__(
+        self, session: aiohttp.ClientSession, url: str = "http://cleverpet.local"
+    ):
         """
-        Initializes communication with a hackerpet. Since it starts a client session,
-        but does not close it, it is the responsibility of the caller to eventually
-        call `await hackerpet.close()`.
+        Initializes communication with a hackerpet. it is the responsibility of the caller to
+        eventually close the provided session.
 
         # Args
+        session: a client session to communicate with the hackerpet.
+
         url: by default, the hackerpet starts with the url "http://cleverpet.local".
              This should not need an override except if a separate DNS entry is created,
              or if an IP is passed in directly
         """
 
-        self.session = aiohttp.ClientSession()
+        self.session = session
         parsed = urlparse(url)
         self.url = parsed._replace(scheme="http").geturl()
-
-    async def close(self):
-        """closes the client session with the hackerpet"""
-        await self.session.close()
 
     async def status(self) -> Status:
         """retrieves and returns a Status from the hackerpet"""
@@ -434,10 +475,9 @@ class Hackerpet:
 
 
 async def main() -> int:
-    h = Hackerpet()
-    try:
-        status = await h.status()
-        print(vars(status))
-    finally:
-        await h.close()
+    """example that prints out current status of the hackerpet"""
+    async with aiohttp.ClientSession() as session:
+        hackerpet = Hackerpet(session)
+        status = await hackerpet.status()
+        print(status.as_dict())
     return 0

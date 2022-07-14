@@ -17,6 +17,6 @@ classifiers = [
 dynamic = ["version"]
 
 [project.scripts]
-cli-name = "hackerpet"
+cli-name = "hackerpet:main"
 
 [tool.setuptools_scm]

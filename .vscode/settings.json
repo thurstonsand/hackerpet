@@ -7,5 +7,10 @@
     "[python]": {
         "editor.formatOnSave": true
     },
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.linting.pylintArgs": [
+        "--disable=C0114", // missing-module-docstring; don't want docstrings on imports
+        "--disable=E0307" // invalid-str-returned; false positive on exhaustive match statement
+    ],
+    "python.analysis.typeCheckingMode": "strict"
 }
