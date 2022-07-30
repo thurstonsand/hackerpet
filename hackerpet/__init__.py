@@ -12,7 +12,6 @@ Functionality includes:
 * set_hub_mode(hub_mode: HubMode)
 * set_schedule(schedule: Schedule)
 """
-
 import json
 from datetime import datetime, time
 from enum import Enum, IntEnum, auto, unique
@@ -40,7 +39,10 @@ class OutOfRange(IndexError):
     message: str
 
     def __init__(self, name: str, lower: int, upper: int, found: int):
-        self.message = f"expected value {name} to be in range [{lower}, {upper}], but found {found}"
+        self.message = (
+            f"expected value {name} to be "
+            f"in range [{lower}, {upper}], but found {found}"
+        )
         super().__init__(self.message)
 
     @staticmethod
@@ -337,7 +339,10 @@ class Status:
 
     @property
     def game(self) -> Game | GameTransitioning:
-        """the current game level being played, or if it is transitioning between levels"""
+        """
+        the current game level being played,
+        or if it is transitioning between levels
+        """
         prev_game = Game.from_int_str(self._raw_body["game_id_playing"])
         next_game = Game.from_int_str(self._raw_body["game_id_queued"])
         if prev_game == next_game:
@@ -387,8 +392,8 @@ class Hackerpet:
         self, session: aiohttp.ClientSession, url: str = "http://cleverpet.local"
     ):
         """
-        Initializes communication with a hackerpet. it is the responsibility of the caller to
-        eventually close the provided session.
+        Initializes communication with a hackerpet. it is the responsibility of the
+        caller to eventually close the provided session.
 
         # Args
         session: a client session to communicate with the hackerpet.
@@ -400,7 +405,7 @@ class Hackerpet:
 
         self.session = session
         parsed = urlparse(url)
-        self.url = parsed._replace(scheme="http").geturl()
+        self.url = f"http://{parsed.path if parsed.path else parsed.netloc}"
 
     async def status(self) -> Status:
         """retrieves and returns a Status from the hackerpet"""
@@ -439,7 +444,10 @@ class Hackerpet:
             pass
 
     async def set_timezone(self, tz_offset: int):
-        """sets timezone offset of the hackerpet; validates value is between -12 and +13"""
+        """
+        sets timezone offset of the hackerpet;
+        validates value is between -12 and +13
+        """
 
         OutOfRange.test_range("timezone_offset", -12, 13, tz_offset)
         async with self.session.post(
@@ -474,10 +482,13 @@ class Hackerpet:
             pass
 
 
+__version__ = "0.0.1-alpha"
+
+
 async def main() -> int:
     """example that prints out current status of the hackerpet"""
     async with aiohttp.ClientSession() as session:
-        hackerpet = Hackerpet(session)
+        hackerpet = Hackerpet(session, url="cleverpet.thurstons.house")
         status = await hackerpet.status()
         print(status.as_dict())
     return 0
