@@ -1,6 +1,12 @@
 # hackerpet
 
+[![GitHub Release](https://img.shields.io/github/release/thurstonsand/hackerpet?style=flat-square)](https://github.com/thurstonsand/hackerpet/releases)
+[![GitHub license](https://img.shields.io/github/license/thurstonsand/hackerpet?style=flat-square)](https://github.com/thurstonsand/hackerpet/blob/main/LICENSE)
+
+
 python bindings for the [hackerpet](https://docs.particle.io/reference/device-os/libraries/h/hackerpet_plus/) HTTP API. Code is fully documented, so see `src/hackerpet/__init__.py` for more information.
+
+This is strictly a library, with no executable or CLI.
 
 ## Overview
 
@@ -19,3 +25,29 @@ It is possible to interact with the hackerpet in the following ways:
 # Dependencies
 
 The only dependency for the project is [`aiohttp`](https://docs.aiohttp.org/en/stable/).
+
+# Development
+
+Here are a couple notes to help myself when trying to continue development, since I am a new Python dev.
+
+## Local Development
+
+To run, simply use:
+
+```sh
+poetry run python -m hackerpet
+```
+
+## Releasing
+
+To tag a version for release, use `bumpver`:
+
+```sh
+bumpver update -t final --major/--minor/--patch
+```
+
+where 
+
+* `-t final` describes which tag to use (between `alpha`, `beta`, `rc`, `post`, and `final`)
+* `--major/--minor/--patch` describes which part of the version to bump
+* Optionally use `-d` for dry-run

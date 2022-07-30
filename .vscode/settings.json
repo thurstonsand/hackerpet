@@ -12,5 +12,8 @@
         "--disable=C0114", // missing-module-docstring; don't want docstrings on imports
         "--disable=E0307" // invalid-str-returned; false positive on exhaustive match statement
     ],
-    "python.analysis.typeCheckingMode": "strict"
+    "python.analysis.typeCheckingMode": "strict",
+    "python.languageServer": "Pylance",
+    "python.linting.pylintEnabled": true,
+    "git.allowForcePush": true
 }
