@@ -26,7 +26,10 @@ class OutOfRange(IndexError):
         super().__init__(self.message)
 
     @staticmethod
-    def test_range(name: str, lower: int, upper: int, found: int):
-        """helper function for testing if a value is out of range"""
-        if found < lower or found > upper:
+    def check_range(name: str, lower: int, upper: int, found: int):
+        """
+        helper function for checking if a value is out of range, and raises an exception
+        if it is
+        """
+        if not lower <= found <= upper:
             raise OutOfRange(name, lower, upper, found)

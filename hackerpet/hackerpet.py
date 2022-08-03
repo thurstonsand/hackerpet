@@ -77,7 +77,7 @@ class Hackerpet:
         validates value is between -12 and +13
         """
 
-        OutOfRange.test_range("timezone_offset", -12, 13, tz_offset)
+        OutOfRange.check_range("timezone_offset", -12, 13, tz_offset)
         async with self.session.post(
             f"{self.url}/local-api/set_timezone", json={"timezone_offset": tz_offset}
         ):
