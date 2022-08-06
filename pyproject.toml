@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hackerpet"
-version = "0.1.0-alpha"
+version = "0.2.0-alpha"
 description = "python bindings for the Hackerpet HTTP API"
 authors = ["Thurston Sandberg <thurstonsand@hey.com>"]
 license = "MIT"
@@ -37,7 +37,7 @@ build-backend = "poetry.core.masonry.api"
 asyncio_mode = "auto"
 
 [tool.bumpver]
-current_version = "0.1.0-alpha"
+current_version = "0.2.0-alpha"
 version_pattern = "MAJOR.MINOR.PATCH[-TAG]"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true

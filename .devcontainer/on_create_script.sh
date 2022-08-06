@@ -19,3 +19,6 @@ poetry install
 
 # setup pre-commit hook
 poetry run pre-commit install
+
+# setup setuptools for bumpver
+pip install --upgrade setuptools

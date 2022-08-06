@@ -12,7 +12,7 @@ Functionality includes:
 * set_hub_mode(hub_mode: HubMode)
 * set_schedule(schedule: Schedule)
 """
-__version__ = "0.0.1-alpha"
+__version__ = "0.2.0-alpha"
 
 __all__ = ["data_types", "exceptions", "hackerpet"]
 
