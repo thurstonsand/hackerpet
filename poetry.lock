@@ -33,6 +33,17 @@ yarl = ">=1.0,<2.0"
 speedups = ["aiodns", "brotli", "cchardet"]
 
 [[package]]
+name = "aiohttp-retry"
+version = "2.7.0"
+description = "Simple retry client for aiohttp"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+aiohttp = "*"
+
+[[package]]
 name = "aiosignal"
 version = "1.2.0"
 description = "aiosignal: a list of registered asynchronous callbacks"
@@ -607,7 +618,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "85198bdee1154f66212b4f87ba5eb69a52505a3ac183493887f1cc3e28b2ade8"
+content-hash = "8f13caf928cb6603ecb83c8add5950b146826a48647e30a4fa1c58a2a8c788fd"
 
 [metadata.files]
 aiodns = [
@@ -687,6 +698,10 @@ aiohttp = [
     {file = "aiohttp-3.8.1-cp39-cp39-win32.whl", hash = "sha256:7187a76598bdb895af0adbd2fb7474d7f6025d170bc0a1130242da817ce9e7d1"},
     {file = "aiohttp-3.8.1-cp39-cp39-win_amd64.whl", hash = "sha256:1c182cb873bc91b411e184dab7a2b664d4fea2743df0e4d57402f7f3fa644bac"},
     {file = "aiohttp-3.8.1.tar.gz", hash = "sha256:fc5471e1a54de15ef71c1bc6ebe80d4dc681ea600e68bfd1cbce40427f0b7578"},
+]
+aiohttp-retry = [
+    {file = "aiohttp_retry-2.7.0-py3-none-any.whl", hash = "sha256:02549f40a7b049eec1c651dc3ca1bf3501a91d68c344fd3598e5bee57c230892"},
+    {file = "aiohttp_retry-2.7.0.tar.gz", hash = "sha256:4ce27b529af9ce9d1a03e4aa19590e93dc80ca6bef3a883e51e3a0e094772799"},
 ]
 aiosignal = [
     {file = "aiosignal-1.2.0-py3-none-any.whl", hash = "sha256:26e62109036cd181df6e6ad646f91f0dcfd05fe16d0cb924138ff2ab75d64e3a"},

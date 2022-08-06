@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.241.1/containers/python-3
 {
-	"name": "Python 3",
+	"name": "Hackerpet python wrapper development",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
@@ -20,12 +20,28 @@
 		"vscode": {
 			// Set *default* container specific settings.json values on container create.
 			"settings": {
-				"python.defaultInterpreterPath": "/workspaces/hackerpet/.venv/bin/python",
+				"editor.codeActionsOnSave": {
+					"source.fixAll": true,
+					"source.organizeImports": true
+				},
+				"editor.formatOnPaste": false,
+				"editor.formatOnSave": true,
+				"editor.formatOnType": true,
+				"python.analysis.typeCheckingMode": "strict",
 				"python.linting.enabled": true,
 				"python.linting.pylintEnabled": true,
+				"python.formatting.provider": "black",
+				"files.trimTrailingWhitespace": true,
+				"python.defaultInterpreterPath": "/workspaces/hackerpet/.venv/bin/python",
 				"python.formatting.blackPath": "/workspaces/hackerpet/.venv/bin/black",
 				"python.linting.flake8Path": "/workspaces/hackerpet/.venv/bin/flake8",
-				"python.linting.pylintPath": "/workspaces/hackerpet/.venv/bin/pylint"
+				"python.linting.pylintPath": "/workspaces/hackerpet/.venv/bin/pylint",
+				"python.linting.pylintArgs": [
+					"--disable=C0114", // missing-module-docstring; don't want docstrings on imports
+					"--disable=E0307" // invalid-str-returned; false positive on exhaustive match statement
+				],
+				"python.languageServer": "Pylance",
+				"git.allowForcePush": true
 			},
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [

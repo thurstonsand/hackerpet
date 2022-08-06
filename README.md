@@ -24,7 +24,7 @@ It is possible to interact with the hackerpet in the following ways:
 
 # Dependencies
 
-The only dependency for the project is [`aiohttp`](https://docs.aiohttp.org/en/stable/).
+The only dependencies for the project is [`aiohttp`](https://docs.aiohttp.org/en/stable/) and [`aiohttp-retry`](https://github.com/inyutin/aiohttp_retry).
 
 # Development
 
@@ -46,7 +46,7 @@ To tag a version for release, use `bumpver`:
 bumpver update -t final --major/--minor/--patch
 ```
 
-where 
+where
 
 * `-t final` describes which tag to use (between `alpha`, `beta`, `rc`, `post`, and `final`)
 * `--major/--minor/--patch` describes which part of the version to bump

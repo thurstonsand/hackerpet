@@ -4,7 +4,7 @@
 python -m pip install --upgrade pip
 
 # install poetry
-curl -sSL https://install.python-poetry.org | python3 -
+curl -sSL https://install.python-poetry.org | python -
 
 # zsh completions for poetry (may not actually work)
 mkdir -p ~/.zfunc && poetry completions zsh > ~/.zfunc/_poetry
