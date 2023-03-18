@@ -1,0 +1,66 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.241.1/containers/python-3
+{
+	"name": "Hackerpet python wrapper development",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "..",
+		"args": {
+			// Update 'VARIANT' to pick a Python version: 3, 3.10, 3.9, 3.8, 3.7, 3.6
+			// Append -bullseye or -buster to pin to an OS version.
+			// Use -bullseye variants on local on arm64/Apple Silicon.
+			"VARIANT": "3",
+			// Options
+			"NODE_VERSION": "none"
+		}
+	},
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"editor.codeActionsOnSave": {
+					"source.fixAll": true,
+					"source.organizeImports": true
+				},
+				"editor.formatOnPaste": false,
+				"editor.formatOnSave": true,
+				"editor.formatOnType": true,
+				"python.analysis.typeCheckingMode": "strict",
+				"python.linting.enabled": true,
+				"python.linting.pylintEnabled": true,
+				"python.formatting.provider": "black",
+				"files.trimTrailingWhitespace": true,
+				"python.defaultInterpreterPath": "/workspaces/hackerpet/.venv/bin/python",
+				"python.formatting.blackPath": "/workspaces/hackerpet/.venv/bin/black",
+				"python.linting.flake8Path": "/workspaces/hackerpet/.venv/bin/flake8",
+				"python.linting.pylintPath": "/workspaces/hackerpet/.venv/bin/pylint",
+				"python.linting.pylintArgs": [
+					"--disable=C0114", // missing-module-docstring; don't want docstrings on imports
+					"--disable=E0307" // invalid-str-returned; false positive on exhaustive match statement
+				],
+				"python.languageServer": "Pylance",
+				"git.allowForcePush": true
+			},
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-python.vscode-pylance",
+				"ms-python.python",
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"bungcip.better-toml"
+			]
+		}
+	},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	"onCreateCommand": ".devcontainer/on_create_script.sh",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": ".devcontainer/post_create_script.sh",
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode",
+	"features": {
+		"git": "os-provided"
+	}
+}

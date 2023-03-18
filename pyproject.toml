@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "hackerpet"
+version = "0.2.0-alpha"
+description = "python bindings for the Hackerpet HTTP API"
+authors = ["Thurston Sandberg <thurstonsand@hey.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/thurstonsand/hackerpet"
+keywords = ["cleverpet", "hackerpet"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Home Automation",
+    "Topic :: Software Development :: Libraries"
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiohttp = {extras = ["speedups"], version = "^3.8.1"}
+aiohttp-retry = "^2.7.0"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.20.0"
+bumpver = "^2022.1118"
+pylint = "^2.14"
+flake8 = "^4.0.1"
+black = "^22.6.0"
+pytest = "^7.1.2"
+pytest-asyncio = "^0.19.0"
+pytest-aiohttp = "^1.0.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.bumpver]
+current_version = "0.2.0-alpha"
+version_pattern = "MAJOR.MINOR.PATCH[-TAG]"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "{version}"'
+]
+"hackerpet/__init__.py" = [
+    '^__version__ = "{version}"'
+]
