@@ -293,9 +293,11 @@ class Status:
         prev_game = Game.from_int_str(raw_body["game_id_playing"])
         next_game = Game.from_int_str(raw_body["game_id_queued"])
         game = (
-            next_game
-            if prev_game == next_game
-            else GameTransitioning(prev_game, next_game),
+            (
+                next_game
+                if prev_game == next_game
+                else GameTransitioning(prev_game, next_game)
+            ),
         )
 
         # set hub_state
