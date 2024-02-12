@@ -35,7 +35,7 @@ repos:
     args: ['--max-line-length=89', '--extend-ignore=E203', '--exclude=hackerpet/__init__.py']
     language_version: python3
 - repo: https://github.com/psf/black
-  rev: 24.1.1
+  rev: 24.2.0
   hooks:
   - id: black
     language_version: python 3
