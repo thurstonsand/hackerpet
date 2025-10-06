@@ -34,7 +34,7 @@ repos:
     - flake8-black>=0.1.1
     args: ['--max-line-length=89', '--extend-ignore=E203', '--exclude=hackerpet/__init__.py']
     language_version: python3
-- repo: https://github.com/psf/black
+- repo: https://github.com/psf/black-pre-commit-mirror
   rev: 25.9.0
   hooks:
   - id: black
